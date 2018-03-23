@@ -1,0 +1,708 @@
+﻿/*****************************************************************************/
+/*                                                                           */
+/*    Chamaeleo - A responsive LESS framework                                */
+/*                                                                           */
+/*   Copyright (c) 2017-2018 - Jim Lightfoot                                 */
+/*                                                                           */
+/*      This software is available under the MIT license (MIT)               */
+/*                                                                           */
+/*****************************************************************************/
+
+img
+{
+	border:   none;
+}
+
+.clear
+{
+  clear:    both;
+  float:    none;
+}
+
+.table
+{
+  .ch-table();
+}
+
+/*****************************************************************************
+ ** General purpose mix-ins
+ *****************************************************************************/
+
+/*****************************************************************************/
+.ch-absolute-position(@top: 0, @right: 0, @bottom: 0, @left: 0)
+{
+  position:                 absolute;
+  top:                      @top;
+  right:                    @right; 
+  bottom:                   @bottom;
+  left:                     @left;
+}
+
+/*****************************************************************************/
+.ch-rotate(@angle, @x: 0, @y: 0)
+{
+ -ms-transform:             rotate(@angle);
+ -webkit-transform:         rotate(@angle);
+ -moz-transform:            rotate(@angle);
+ -o-transform:              rotate(@angle);
+  transform:                rotate(@angle);
+
+ -ms-transform-origin:      @x @y;
+ -webkit-transform-origin:  @x @y;
+ -moz-transform-origin:     @x @y;
+ -o-transform-origin:       @x @y;
+  transform-origin:         @x @y;
+}
+
+/*****************************************************************************/
+.ch-table(@cell-ht: 1.4em)
+{
+  display:                  table;
+  border-collapse:          collapse;
+  border-spacing:           0;
+
+  > div
+  {
+    display:                table-row;
+
+    > div
+    {
+      display:              table-cell;
+      height:               @cell-ht;
+      line-height:          @cell-ht;
+      vertical-align:       middle;
+    }
+  }
+}
+
+/*****************************************************************************
+ ** Undoes the .ch-table function above. Useful in responsiveness when you 
+ **   want to make a table not be a table at lower resolutions
+ *****************************************************************************/
+.ch-no-table(@maxwidth)
+{
+  @media all and (max-width: @maxwidth)
+  {
+    display:                block;
+
+    > div
+    {
+      display:              block;
+
+      > div
+      {
+        display:            block;
+      }
+    }
+  }
+}
+
+/*****************************************************************************/
+.ch-button-centered(@height)
+{
+  text-align:               center;
+  vertical-align:           middle;
+  height:                   @height;
+  line-height:              @height;
+}
+
+/*****************************************************************************/
+.ch-list-2(@width1, @phone-wd, @margin: 0)
+{ 
+  .ch-absolute-position();
+
+  > section
+  {
+    // Scroller
+    > div
+    {
+  	  overflow-y: scroll;
+      .ch-absolute-position(@margin, @margin, @margin, @margin);
+    }
+
+    &:first-of-type
+    {
+      .ch-absolute-position(0, unset, 0, 0);
+      .ch-respond-position(@phone-wd, static) !important;
+      width: @width1;
+    } 
+
+    &:last-of-type
+    {
+      .ch-absolute-position(0, 0, 0, @width1 + @margin);
+      .ch-respond-position(@phone-wd, static) !important;
+    } 
+  
+    .ch-respond-width(@phone-wd, 100%) !important;
+    .ch-respond-clear(@phone-wd) !important;
+
+    > div
+    {
+      .ch-respond-position(@phone-wd, static) !important;
+      .ch-respond-margin(@phone-wd, 0) !important;
+      .ch-respond-overflow-y(@phone-wd, hidden) !important;  
+    }
+  }
+}
+
+/*****************************************************************************/
+.ch-list-3(@width1, @width2, @phone-wd, @margin: 0)
+{ 
+  .ch-absolute-position();
+
+  > section
+  {
+    // Scroller
+    > div
+    {
+  	  overflow-y: scroll;
+      .ch-absolute-position(@margin, @margin, @margin, @margin);
+    }
+
+    &:first-of-type
+    {
+      .ch-absolute-position(0, unset, 0, 0);
+      .ch-respond-position(@phone-wd, static) !important;
+      width: @width1;
+    } 
+
+    &:nth-of-type(2)
+    {
+      .ch-absolute-position(0, unset, 0, @width1 + @margin);
+      .ch-respond-position(@phone-wd, static) !important;
+      width: @width2;
+    } 
+
+    &:last-of-type
+    {
+      .ch-absolute-position(0, 0, 0, @width1 + @width2 + @margin*2);
+      .ch-respond-position(@phone-wd, static) !important;
+    } 
+  
+    .ch-respond-width(@phone-wd, 100%) !important;
+    .ch-respond-clear(@phone-wd) !important;
+
+    > div
+    {
+      .ch-respond-position(@phone-wd, static) !important;
+      .ch-respond-margin(@phone-wd, 0) !important;
+      .ch-respond-overflow-y(@phone-wd, hidden) !important;  
+    }
+  }
+}
+
+/*****************************************************************************/
+.ch-respond-list-3(@maxwidth, @width1, @width2, @margin: 0)
+{ 
+  @media all and (max-width: @maxwidth)
+  {
+    > section
+    {
+      &:first-of-type
+      {
+        width: @width1;
+      } 
+
+      &:nth-of-type(2)
+      {
+        left: @width1 + @margin;
+        width: @width2;
+      } 
+
+      &:last-of-type
+      {
+        left: @width1 + @width2 + @margin*2;
+      } 
+    }
+  }
+}
+
+/*****************************************************************************/
+.ch-square-photo(@width)
+{
+  position: absolute;
+  height: @width;
+  max-height: @width;
+  overflow-y: hidden;
+
+  > div
+  {
+    max-height: @width;
+    height: @width;
+    overflow-y: hidden;
+    position: relative;
+    crop: rect(0, 0, @width, @width);
+    clip: rect(0, 0, @width, @width);
+
+    img
+    {
+      width: @width;
+    }
+  }
+}
+
+/*****************************************************************************/
+.ch-respond-square-photo(@maxwidth, @width)
+{
+  @media all and (max-width: @maxwidth)
+  {
+    height: @width !important;
+    max-height: @width !important;
+
+    > div
+    {
+      max-height: @width !important;
+      height: @width !important;
+      crop: rect(0, 0, @width, @width) !important;
+      clip: rect(0, 0, @width, @width) !important;
+
+      img
+      {
+        width: @width !important;
+      }
+    }
+  }
+}
+
+/*****************************************************************************/
+.square-photo2()
+{
+  display:          inline-block !important;
+	overflow:         hidden;
+	letter-spacing:   -0.31em; /* webkit */
+	*letter-spacing:  normal;  /* reset IE < 8 */
+	word-spacing:     -0.43em; /* IE < 8 && gecko */
+
+  &::before,
+  img
+  {
+	  display:        inline-block !important;
+	  vertical-align: middle;
+  }
+
+  &::before
+  {
+	  content: "";
+	  padding-top:    100%;  
+  }
+
+  img
+  {
+	  padding-left:   100%;
+	  margin:         -999em -100%;
+  }
+}
+
+/*****************************************************************************
+ ** Responsive mix-ins
+ *****************************************************************************/
+
+/*****************************************************************************/
+.ch-flexbox-5()
+{
+  display: flex;
+  flex-wrap: wrap;
+
+  > *
+  {
+    flex-basis: 20%;
+  }
+}
+
+/*****************************************************************************/
+.ch-flexbox-4()
+{
+  display: flex;
+  flex-wrap: wrap;
+
+  > *
+  {
+    flex-basis: 25%;
+  }
+}
+
+/*****************************************************************************/
+.ch-flexbox-3()
+{
+  display: flex;
+  flex-wrap: wrap;
+
+  > *
+  {
+    flex-basis: 32%;
+  }
+}
+
+/*****************************************************************************/
+.ch-flexbox-2()
+{
+  display: flex;
+  flex-wrap: wrap;
+
+  > *
+  {
+    flex-basis: 50%;
+  }
+}
+
+/*****************************************************************************/
+.ch-flexbox-1()
+{
+  display: flex;
+  flex-wrap: wrap;
+
+  > *
+  {
+    flex-basis: 100%;
+  }
+}
+
+/*****************************************************************************/
+.ch-flexbox-2-1(@maxWidth)
+{
+  .ch-flexbox-2();
+
+  @media all and (max-width: @maxWidth)
+  {
+    .ch-flexbox-1();
+  }
+}
+
+/*****************************************************************************/
+.ch-flexbox-3-2-1(@maxWidth2, @maxWidth1)
+{
+  .ch-flexbox-3();
+
+  @media all and (max-width: @maxWidth2)
+  {
+    .ch-flexbox-2();
+  }
+
+  @media all and (max-width: @maxWidth1)
+  {
+    .ch-flexbox-1();
+  }
+}
+
+/*****************************************************************************/
+.ch-flexbox-4-3-2-1(@maxWidth3, @maxWidth2, @maxWidth1)
+{
+  .ch-flexbox-4();
+
+  @media all and (max-width: @maxWidth3)
+  {
+    .ch-flexbox-3();
+  }
+
+  @media all and (max-width: @maxWidth2)
+  {
+    .ch-flexbox-2();
+  }
+
+  @media all and (max-width: @maxWidth1)
+  {
+    .ch-flexbox-1();
+  }
+}
+
+/*****************************************************************************/
+.ch-flexbox-5-4-3-2-1(@maxWidth4, @maxWidth3, @maxWidth2, @maxWidth1)
+{
+  .ch-flexbox-5();
+
+  @media all and (max-width: @maxWidth4)
+  {
+    .ch-flexbox-4();
+  }
+
+  @media all and (max-width: @maxWidth3)
+  {
+    .ch-flexbox-3();
+  }
+
+  @media all and (max-width: @maxWidth2)
+  {
+    .ch-flexbox-2();
+  }
+
+  @media all and (max-width: @maxWidth1)
+  {
+    .ch-flexbox-1();
+  }
+}
+
+/*****************************************************************************/
+.ch-flexbox-4-2-1(@maxWidth2, @maxWidth1)
+{
+  .ch-flexbox-4();
+
+  @media all and (max-width: @maxWidth2)
+  {
+    .ch-flexbox-2();
+  }
+
+  @media all and (max-width: @maxWidth1)
+  {
+    .ch-flexbox-1();
+  }
+}
+
+/*****************************************************************************/
+.ch-table-cell-hide(@maxWidth, @columnNum)
+{
+  @media all and (max-width: @maxWidth)
+  {
+    tr td:nth-of-type(@{columnNum}),   
+    tr th:nth-of-type(@{columnNum}),  
+    > div > div:nth-of-type(@{columnNum})   
+    {
+      display: none;
+    }
+  }   
+}
+
+/*****************************************************************************/
+.ch-table-cell-show(@maxWidth, @columnNum)
+{
+  @media all and (max-width: @maxWidth)
+  {
+    tr td:nth-of-type(@{columnNum}),   
+    tr th:nth-of-type(@{columnNum}),  
+    > div > div:nth-of-type(@{columnNum})   
+    {
+      display: block;
+    }
+  }   
+}
+
+/*****************************************************************************/
+.ch-respond-hide(@maxWidth)                   { @media all and (max-width: @maxWidth)    { display: none; } }
+.ch-respond-ht-hide(@maxHeight)               { @media all and (max-height: @maxHeight)  { display: none; } }
+.ch-respond-show(@maxWidth)                   { @media all and (max-width: @maxWidth)    { display: block; } }
+.ch-respond-ht-show(@maxHeight)               { @media all and (max-height: @maxHeight)  { display: block; } }
+
+/*****************************************************************************/
+.ch-respond-top(@maxWidth,    @value)         { @media all and (max-width: @maxWidth) { top: @value; } }
+.ch-respond-left(@maxWidth,   @value)         { @media all and (max-width: @maxWidth) { left: @value; } }
+.ch-respond-right(@maxWidth,  @value)         { @media all and (max-width: @maxWidth) { right: @value; } }
+.ch-respond-bottom(@maxWidth, @value)         { @media all and (max-width: @maxWidth) { bottom: @value; } }
+.ch-respond-height(@maxWidth, @value)         { @media all and (max-width: @maxWidth) { height: @value; } }
+.ch-respond-width(@maxWidth,  @value)         { @media all and (max-width: @maxWidth) { width: @value !important; } }
+.ch-respond-min-width(@maxWidth,  @value)     { @media all and (max-width: @maxWidth) { min-width: @value !important; } }
+
+/*****************************************************************************/
+.ch-respond-ht-top(@maxHeight,    @value)     { @media all and (max-height: @maxHeight) { top: @value; } }
+.ch-respond-ht-left(@maxHeight,   @value)     { @media all and (max-height: @maxHeight) { left: @value; } }
+.ch-respond-ht-right(@maxHeight,  @value)     { @media all and (max-height: @maxHeight) { right: @value; } }
+.ch-respond-ht-bottom(@maxHeight, @value)     { @media all and (max-height: @maxHeight) { bottom: @value; } }
+.ch-respond-ht-height(@maxHeight, @value)     { @media all and (max-height: @maxHeight) { height: @value; } }
+.ch-respond-ht-width(@maxHeight,  @value)     { @media all and (max-height: @maxHeight) { width: @value; } }
+
+/*****************************************************************************/
+.ch-respond-margin(@maxWidth,      @value)    { @media all and (max-width: @maxWidth)   { margin: @value; } }
+.ch-respond-ht-margin(@maxHeight,  @value)    { @media all and (max-height: @maxHeight) { margin: @value; } }
+
+/*****************************************************************************/
+.ch-respond-margin-top(@maxWidth,    @value)  { @media all and (max-width: @maxWidth) { margin-top: @value; } }
+.ch-respond-margin-left(@maxWidth,   @value)  { @media all and (max-width: @maxWidth) { margin-left: @value; } }
+.ch-respond-margin-right(@maxWidth,  @value)  { @media all and (max-width: @maxWidth) { margin-right: @value; } }
+.ch-respond-margin-bottom(@maxWidth, @value)  { @media all and (max-width: @maxWidth) { margin-bottom: @value; } }
+
+/*****************************************************************************/
+.ch-respond-padding(@maxWidth,     @value)    { @media all and (max-width: @maxWidth)   { padding: @value; } }
+.ch-respond-ht-padding(@maxHeight, @value)    { @media all and (max-height: @maxHeight) { padding: @value; } }
+
+/*****************************************************************************/
+.ch-respond-padding-top(@maxWidth,    @value)  { @media all and (max-width: @maxWidth) { padding-top: @value; } }
+.ch-respond-padding-left(@maxWidth,   @value)  { @media all and (max-width: @maxWidth) { padding-left: @value; } }
+.ch-respond-padding-right(@maxWidth,  @value)  { @media all and (max-width: @maxWidth) { padding-right: @value; } }
+.ch-respond-padding-bottom(@maxWidth, @value)  { @media all and (max-width: @maxWidth) { padding-bottom: @value; } }
+
+
+/*****************************************************************************/
+.ch-respond-font-size(@maxWidth,     @value)  { @media all and (max-width: @maxWidth)   { font-size: @value; } }
+.ch-respond-ht-font-size(@maxHeight, @value)  { @media all and (max-height: @maxHeight) { font-size: @value; } }
+
+/*****************************************************************************/
+.ch-respond-position(@maxWidth, @position, @top: 0, @right: 0, @bottom: 0, @left: 0)  
+{ 
+  @media all and (max-width: @maxWidth)   
+  { 
+    position: @position !important;
+    top:      @top;
+    right:    @right; 
+    bottom:   @bottom;
+    left:     @left;
+  } 
+}
+
+/*****************************************************************************/
+.ch-respond-ht-position(@maxHeight, @position, @top: 0, @right: 0, @bottom: 0, @left: 0)
+{ 
+  @media all and (max-height: @maxHeight) 
+  { 
+    position: @position;
+    top:      @top;
+    right:    @right; 
+    bottom:   @bottom;
+    left:     @left;
+  } 
+}
+
+/*****************************************************************************/
+.ch-respond-overflow-y(@maxWidth, @value)  
+{ 
+  @media all and (max-width: @maxWidth) 
+  { 
+    overflow-y: @value;
+  } 
+}
+
+/*****************************************************************************/
+.ch-respond-clear(@maxWidth)  
+{ 
+  @media all and (max-width: @maxWidth) 
+  { 
+    clear: both;
+    float: none;
+  } 
+}
+
+/***************************************************************************** 
+ * Delimits (e.g. comma delimited) children in list (ui or ol)
+ *****************************************************************************/
+.ch-delimited(@char, @left-space: 0, @right-space: 0, @fontSize: 5pt, @color: black, @marginTop: 4px)  
+{ 
+  list-style:         none;
+  margin:             0;
+  padding:            0;
+
+  li
+  {
+     float:           left;
+     padding:         0 0 0 @right-space;
+     white-space:     nowrap;
+     margin:          0;
+
+    &::before
+    {
+      content:        @char;
+      margin-left:    0;
+      margin-right:   @left-space;  
+      margin-top:     @marginTop;
+      float:          left;
+      font-size:      @fontSize;
+      color:          @color;
+    }
+
+    &:first-of-type::before
+    {
+      content:        "";
+      margin-left:    0;
+      margin-right:  0;    
+    }
+  }
+}
+
+/***************************************************************************** 
+ ** Changes numbers at different resolutions.
+ **
+ ** .ch-delimited('-', 10px, 10px, 5pt, black, 4px);
+ ** .ch-delimited-respond(600px, 5px, 5px, 4pt, 2px); // Tightens things up at 600px width 
+ **
+ *****************************************************************************/
+.ch-delimited-respond(@maxWidth, @left-space: 0, @right-space: 0, @fontSize: inherit, @marginTop: inherit)  
+{ 
+  li
+  {
+    padding:         0 0 0 @right-space;
+
+    &::before
+    {
+      font-size:      @fontSize !important;
+      margin-right:   @left-space;  
+      margin-top:     @marginTop;
+    }
+  }
+}
+
+.ch-csv(@left-space: 0, @right-space: 5)  
+{ 
+  .ch-delimited(',', @left-space: 0, @right-space: 0);
+}
+
+.ch-center-vert()
+{
+  padding-top: 50%;
+
+  > *
+  {
+    margin-top: -50%;
+  }
+}
+
+.ch-arrow-bottom(@size: 10px, @color: black, @offset: 10px)
+{
+  &:after 
+  {
+	  content:    ' ';
+	  width:      0;
+	  height:     0;
+	  position:   absolute;
+    top:        100%;
+	  left:       @offset;
+
+	  border:     @size solid transparent;
+	  border-top-color: @color;
+  }
+}
+
+.ch-arrow-top(@size: 10px, @color: black, @offset: 10px)
+{
+  &:after 
+  {
+	  content:    ' ';
+	  width:      0;
+	  height:     0;
+	  position:   absolute;
+    top:        -(@size * 2);
+	  left:       @offset;
+
+	  border:     @size solid transparent;
+	  border-bottom-color: @color;
+  }
+}
+
+.ch-tabs(@height: 1.5em, @unselected-y-offset: 0)
+{
+  list-style:         none;
+  margin:             0;
+  padding:            0;
+  height:             @height * 1.59;
+
+  li
+  {
+    margin-top:       @unselected-y-offset;
+    height:           @height - @unselected-y-offset;
+    line-height:      @height - @unselected-y-offset;
+    vertical-align:   middle;
+    text-align:       left;
+    display:          inline-block;
+    cursor:           pointer;
+    padding:          0 1em 0 1em;
+
+    &.selected
+    {
+      height:         @height;
+      line-height:    @height;
+      margin-top:     0;
+    }
+  }
+}
+
+.ch-ellipsis()
+{
+  white-space:    nowrap;
+  overflow:       hidden;
+  text-overflow:  ellipsis;
+}
